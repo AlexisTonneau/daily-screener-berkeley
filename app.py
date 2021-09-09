@@ -3,6 +3,7 @@ import time
 import sys
 # import argparse
 import uvicorn
+import requests
 from fastapi import FastAPI
 from pydantic import BaseModel
 from selenium.webdriver.support import expected_conditions as EC
@@ -10,6 +11,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 
+import utils.utils
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
@@ -52,6 +54,7 @@ async def root(body: RequestLogin):
 
     if driver.find_elements_by_css_selector('.error'):
         driver.close()
+        utils.utils.reboot_heroku()
         return 400, 'BAD USERNAME/PASSWORD'
 
     try:
@@ -78,6 +81,7 @@ async def root(body: RequestLogin):
     except Exception as e:
         print(driver.page_source)
         print(e)
+        utils.utils.reboot_heroku()
         return 500, 'An error occurred'
 
     try:  # For dev purposes
@@ -86,7 +90,13 @@ async def root(body: RequestLogin):
             driver.close()
     except IndexError:
         pass
-    driver.close()
+    utils.utils.reboot_heroku()
+
+
+@app.get("/reboot")
+async def reboot():
+    utils.utils.reboot_heroku()
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=os.getenv('PORT') or 9000)
