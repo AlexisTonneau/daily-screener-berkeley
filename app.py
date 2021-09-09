@@ -59,7 +59,7 @@ async def root(body: RequestLogin):
 
     try:
         driver.switch_to.frame(driver.find_element_by_tag_name("iframe"))
-        driver.find_element_by_css_selector('#remember_me_label_text').click()
+        # driver.find_element_by_css_selector('#remember_me_label_text').click()
         time.sleep(0.2)
         driver.find_element_by_css_selector('.push-label button').click()
         wait.until(EC.title_is('UC Berkeley Symptom Tracker'))
