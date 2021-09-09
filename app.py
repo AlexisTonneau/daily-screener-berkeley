@@ -90,6 +90,8 @@ async def root(body: RequestLogin):
             driver.close()
     except IndexError:
         pass
+
+    time.sleep(3)
     utils.utils.reboot_heroku()
 
 
