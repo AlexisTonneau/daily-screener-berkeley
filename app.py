@@ -67,7 +67,7 @@ async def root(body: RequestLogin):
         print(e)
         pass
 
-    time.sleep(4)
+    time.sleep(5)
 
     driver.get("https://calberkeley.ca1.qualtrics.com/jfe/form/SV_3xTgcs162K19qRv")
     time.sleep(4)
@@ -93,9 +93,9 @@ async def root(body: RequestLogin):
     utils.utils.reboot_heroku()
 
 
-@app.get("/reboot")
-async def reboot():
-    utils.utils.reboot_heroku()
+# @app.get("/reboot")
+# async def reboot():
+#     utils.utils.reboot_heroku()
 
 
 if __name__ == "__main__":
