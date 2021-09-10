@@ -1,10 +1,8 @@
 import os
 import time
 import sys
-# import argparse
 import uvicorn
-import requests
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 from pydantic import BaseModel
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
@@ -17,9 +15,6 @@ chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
-# chrome_options.add_argument('--proxy-server=%s' % get_proxy_ip()) #IF NEEDED
-driver = webdriver.Chrome('/usr/local/bin/chromedriver', chrome_options=chrome_options)
-wait = WebDriverWait(driver, 10)
 
 app = FastAPI()
 
@@ -35,7 +30,9 @@ async def home():
 
 
 @app.post("/")
-async def root(body: RequestLogin):
+async def root(body: RequestLogin, background: BackgroundTasks):
+    driver = webdriver.Chrome('/usr/local/bin/chromedriver', chrome_options=chrome_options)
+    wait = WebDriverWait(driver, 10)
     driver.get("https://calberkeley.ca1.qualtrics.com/jfe/form/SV_3xTgcs162K19qRv")
     time.sleep(2)
 
@@ -57,47 +54,36 @@ async def root(body: RequestLogin):
         utils.utils.reboot_heroku()
         return 400, 'BAD USERNAME/PASSWORD'
 
-    try:
-        driver.switch_to.frame(driver.find_element_by_tag_name("iframe"))
-        # driver.find_element_by_css_selector('#remember_me_label_text').click()
-        time.sleep(0.2)
-        driver.find_element_by_css_selector('.push-label button').click()
-        wait.until(EC.title_is('UC Berkeley Symptom Tracker'))
-    except Exception as e:
-        print(e)
-        pass
+    background.add_task(process_in_background, browser=driver, wait=wait)
+    return
 
-    time.sleep(5)
 
-    driver.get("https://calberkeley.ca1.qualtrics.com/jfe/form/SV_3xTgcs162K19qRv")
-    time.sleep(4)
+def process_in_background(browser, wait):
+    browser.switch_to.frame(browser.find_element_by_tag_name("iframe"))
+    time.sleep(0.2)
+    browser.find_element_by_css_selector('.push-label button').click()
+    wait.until(EC.title_is('UC Berkeley Symptom Tracker'))
+    time.sleep(0.3)
     try:
-        driver.find_element_by_css_selector('label#QID3-2-label.SingleAnswer').click()
-        driver.find_element_by_css_selector('#QID6-5-label').click()
-        driver.find_element_by_css_selector('#QID17-1-label').click()
-        driver.find_element_by_css_selector('#QID13-2-label').click()
-        driver.find_element_by_css_selector('#NextButton').click()
+        browser.find_element_by_css_selector('label#QID3-2-label.SingleAnswer').click()
+        browser.find_element_by_css_selector('#QID6-5-label').click()
+        browser.find_element_by_css_selector('#QID17-1-label').click()
+        browser.find_element_by_css_selector('#QID13-2-label').click()
+        browser.find_element_by_css_selector('#NextButton').click()
 
     except Exception as e:
-        print(driver.page_source)
+        print(browser.page_source)
         print(e)
-        utils.utils.reboot_heroku()
         return 500, 'An error occurred'
 
     try:  # For dev purposes
         if sys.argv[1] == "close":
             time.sleep(10)
-            driver.close()
+            browser.close()
     except IndexError:
         pass
 
-    time.sleep(3)
-    utils.utils.reboot_heroku()
-
-
-# @app.get("/reboot")
-# async def reboot():
-#     utils.utils.reboot_heroku()
+    time.sleep(5)
 
 
 if __name__ == "__main__":
