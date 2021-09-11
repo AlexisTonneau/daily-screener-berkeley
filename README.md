@@ -12,7 +12,7 @@ Enables to fill automatically COVID-19 Daily Screener of UC Berkeley. _You must 
 ## How-to
 You have 5 seconds to accept Duo Mobile push notification to succeed !
 #### iOS
-Use [this iOS shortcut here.](https://www.icloud.com/shortcuts/a88a2b9ad5754ec3b6340e6d3f6e9842)
+Use [this iOS shortcut here.](https://www.icloud.com/shortcuts/484e0f810792436f836bc5f31c7e56c7)
 If it's your first time using iOS shortcuts, please follow [this tutorial](https://support.apple.com/guide/shortcuts/enable-shared-shortcuts-apdfeb05586f/ios)
 
 #### Android
