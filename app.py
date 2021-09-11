@@ -51,7 +51,6 @@ async def root(body: RequestLogin, background: BackgroundTasks):
 
     if driver.find_elements_by_css_selector('.error'):
         driver.close()
-        utils.utils.reboot_heroku()
         return 400, 'BAD USERNAME/PASSWORD'
 
     background.add_task(process_in_background, browser=driver, wait=wait)
