@@ -1,4 +1,5 @@
-# Auto Daily Screener 
+# Auto Daily Screener <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Seal_of_University_of_California%2C_Berkeley.svg/langfr-1920px-Seal_of_University_of_California%2C_Berkeley.svg.png" width="80" height="80" />
+
 
 Enables to fill automatically COVID-19 Daily Screener of UC Berkeley. _You must have a CalNet ID_
 
