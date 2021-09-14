@@ -32,6 +32,7 @@ async def home():
 @app.post("/")
 async def root(body: RequestLogin, background: BackgroundTasks):
     driver = webdriver.Chrome('/usr/local/bin/chromedriver', chrome_options=chrome_options)
+    driver.set_page_load_timeout(50)
     wait = WebDriverWait(driver, 10)
     driver.get("https://calberkeley.ca1.qualtrics.com/jfe/form/SV_3xTgcs162K19qRv")
     time.sleep(2)
