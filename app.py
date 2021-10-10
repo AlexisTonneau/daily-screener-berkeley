@@ -35,20 +35,20 @@ async def root(body: RequestLogin, background: BackgroundTasks):
     driver.set_page_load_timeout(50)
     wait = WebDriverWait(driver, 10)
     driver.get("https://calberkeley.ca1.qualtrics.com/jfe/form/SV_3xTgcs162K19qRv")
-    time.sleep(1)
-
-    driver.find_element_by_css_selector('.reg').click()
-    driver.find_element_by_css_selector('#NextButton').click()
     time.sleep(0.5)
 
     driver.find_element_by_css_selector('.reg').click()
     driver.find_element_by_css_selector('#NextButton').click()
-    time.sleep(2)
+    time.sleep(0.3)
+
+    driver.find_element_by_css_selector('.reg').click()
+    driver.find_element_by_css_selector('#NextButton').click()
+    time.sleep(0.6)
 
     driver.find_element_by_id('username').send_keys(body.username)
     driver.find_element_by_id('password').send_keys(body.password)
     driver.find_element_by_id('submit').click()
-    time.sleep(2)
+    time.sleep(0.5)
 
     if driver.find_elements_by_css_selector('.error'):
         driver.close()
@@ -83,7 +83,7 @@ def process_in_background(browser, wait):
     except IndexError:
         pass
 
-    time.sleep(5)
+    browser.close()
 
 
 if __name__ == "__main__":
