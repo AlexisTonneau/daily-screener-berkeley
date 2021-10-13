@@ -43,7 +43,7 @@ async def root(body: RequestLogin, background: BackgroundTasks):
 
     driver.find_element_by_css_selector('.reg').click()
     driver.find_element_by_css_selector('#NextButton').click()
-    time.sleep(0.6)
+    time.sleep(1.3)
 
     driver.find_element_by_id('username').send_keys(body.username)
     driver.find_element_by_id('password').send_keys(body.password)
